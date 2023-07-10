@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Header from "./Header";
 import ListingsContainer from "./ListingsContainer";
+import Form from "./Form";
 
 function App() {
   const[listings, setListings] = useState([])
@@ -68,9 +69,15 @@ const newListings = listings.filter((listing) => {
 
 })
 
+function updateListings(newListing){
+  const newListings = [...listings, newListing]
+  setListings(newListings)
+}
+
   return (
     <div className="app">
       <Header handleSelectedListings={handleSelectedListings} sortByLocation={sortByLocation}/>
+      <Form updateListings={updateListings}/>
       <ListingsContainer handleDelete={handleDelete} listings={newListings} />
     </div>
   );
