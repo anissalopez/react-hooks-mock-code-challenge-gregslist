@@ -5,6 +5,7 @@ import ListingsContainer from "./ListingsContainer";
 function App() {
   const[listings, setListings] = useState([])
   const [input, setInput] = useState("")
+  const [sort, setSort] = useState(false)
   
 
   useEffect(() =>{
@@ -17,15 +18,6 @@ function App() {
     setInput(selectedListings)
   }
 
-  const newListings = listings.filter((listing) => {
-    if(input.length > 0){
-      return listing["description"].toLowerCase().startsWith(input.toLowerCase())
-    }
-    else{
-      return true
-    }
-
-  })
 
 function handleDelete(id){
   const newListings = listings.filter((listing) => {
@@ -34,11 +26,51 @@ function handleDelete(id){
 
   setListings(newListings)
 }
-  
+
+function sortByLocation(){
+
+  setSort((sort) => !sort)
+
+  const updatedListings = listings.sort((listing1, listing2) => {
+    
+    if(sort){
+      if(listing1.location.toLowerCase() > listing2.location.toLowerCase()){
+      return 1
+      }
+     if(listing1.location.toLowerCase() < listing2.location.toLowerCase()){
+      return -1
+     }
+      return 0
+     }
+   if(sort === false){
+    if(listing1.location.toLowerCase() > listing2.location.toLowerCase()){
+      return -1
+    }
+    if(listing1.location.toLowerCase() < listing2.location.toLowerCase()){
+      return 1
+    }
+    return 0
+   }
+  })
+
+
+  setListings(updatedListings)
+
+}
+
+const newListings = listings.filter((listing) => {
+  if(input.length > 0){
+    return listing["description"].toLowerCase().startsWith(input.toLowerCase())
+  }
+  else{
+    return true
+  }
+
+})
 
   return (
     <div className="app">
-      <Header handleSelectedListings={handleSelectedListings}/>
+      <Header handleSelectedListings={handleSelectedListings} sortByLocation={sortByLocation}/>
       <ListingsContainer handleDelete={handleDelete} listings={newListings} />
     </div>
   );
